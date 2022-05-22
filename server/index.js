@@ -2,6 +2,8 @@
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
+const pool = require("./helpers/db");
+const pgSession = require("connect-pg-simple")(session);
 require("dotenv").config();
 
 const app = express();
@@ -18,6 +20,10 @@ app.use(
 
 app.use(
   session({
+    store: new pgSession({
+      pool: pool,
+      tableName: "session",
+    }),
     name: "sessionId",
     secret: "thisIsMySecret",
     resave: false,
@@ -25,7 +31,7 @@ app.use(
     cookie: {
       secure: false,
       httpOnly: true,
-      expires: 1000 * 60 * 60 * 24 * 366,
+      expires: 1000 * 60 * 60,
     },
   })
 );

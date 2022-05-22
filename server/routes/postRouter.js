@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("../helpers/multer");
 const postController = require("../controllers/postController");
 const checkMiddleware = require("../middlewares/checkMiddleware");
-const multer = require("../helpers/multer");
 
 router.use(checkMiddleware);
-router.post("/create", multer.single("formId"), postController.createPost);
+router.post("/upload", multer.single("formId"), postController.uploadPicture);
+router.post("/create", postController.createPost);
+router.get("/all", postController.getPosts);
 
 module.exports = router;

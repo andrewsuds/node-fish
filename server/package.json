@@ -11,12 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "connect-pg-simple": "^7.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.18.1",
     "express-session": "^1.17.2",
     "multer": "^1.4.4",
     "nodemon": "^2.0.16",
-    "pg": "^8.7.3"
+    "pg": "^8.7.3",
+    "piexifjs": "^1.0.6"
   }
 }

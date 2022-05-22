@@ -6,10 +6,11 @@ function attemptRegister(req, res) {
   const email = req.body.email;
   const username = req.body.username;
   const password = req.body.password;
+
   bcrypt.hash(password, 10, (err, hash) => {
     if (err) {
       console.log(err);
-      return res.json("Error with creating hash");
+      return res.json({ message: "Error" });
     }
 
     pool.query(
@@ -63,7 +64,7 @@ function checkLogin(req, res) {
   if (!req.session || !req.session.accountid) {
     return res.json({ loggedIn: false });
   } else {
-    return res.json({ loggedIn: true, message: req.session.username });
+    return res.json({ loggedIn: true, username: req.session.username });
   }
 }
 
