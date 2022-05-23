@@ -48,7 +48,8 @@ async function attemptLogin(req, res) {
       req.session.accountid = potentialLogin.rows[0].accountid;
       req.session.username = potentialLogin.rows[0].username;
       return res.json({
-        message: "Logged In: " + potentialLogin.rows[0].accountid,
+        loggedIn: true,
+        message: potentialLogin.rows[0].username,
       });
     } else {
       return res.json({ message: "Incorrect username or password" });
