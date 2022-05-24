@@ -9,7 +9,7 @@ async function uploadPicture(req, res) {
   return res.json({
     message: "Image succesfully uploaded!",
     filename: filename,
-    gps: coordinates,
+    location: coordinates,
   });
 }
 
@@ -39,7 +39,7 @@ function createPost(req, res) {
 
 function getPosts(req, res) {
   pool.query(
-    "SELECT postid, weight, length, location, picture, caption, species, accountid FROM post INNER JOIN species on post.speciesid = species.speciesid ORDER BY postid DESC;",
+    "SELECT postid, username, species, weight, length, caption, picture, location FROM post INNER JOIN account on post.accountid = account.accountid INNER JOIN species on post.speciesid = species.speciesid ORDER BY postid DESC;",
     (err, result) => {
       if (err) {
         console.log(err.message);
