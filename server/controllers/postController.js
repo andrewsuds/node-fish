@@ -28,10 +28,10 @@ function createPost(req, res) {
     (err, result) => {
       if (err) {
         console.log(err.message);
-        return res.json({ message: err.message });
+        return res.json({ posted: false, message: "Error in submitting data" });
       }
       if (result) {
-        return res.json({ message: "Successfully posted!" });
+        return res.json({ posted: true, message: "Successfully posted!" });
       }
     }
   );

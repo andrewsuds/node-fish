@@ -1,10 +1,14 @@
 import Axios from "axios";
-import { useState } from "react";
+import { UserContext } from "../lib/UserContext";
+import { useState, useContext } from "react";
+import { useRouter } from "next/router";
 
 export default function LoginPage() {
   Axios.defaults.withCredentials = true;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { user, setUser } = useContext(UserContext);
+  const Router = useRouter();
 
   const login = () => {
     Axios.post("http://localhost:3001/auth/login", {
@@ -13,7 +17,8 @@ export default function LoginPage() {
     }).then((response) => {
       console.log(response.data);
       if (response.data.loggedIn === true) {
-        alert("Logged In");
+        setUser(response.data.username);
+        Router.push("/");
       }
     });
   };

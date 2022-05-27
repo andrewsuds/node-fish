@@ -16,8 +16,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
-      <NavBar />
+    <div className="">
       <h1 className="text-3xl font-bold">Feed View</h1>
 
       {listOfPosts.map((value) => {
@@ -35,6 +34,6 @@ export default function Home() {
           </>
         );
       })}
-    </>
+    </div>
   );
 }

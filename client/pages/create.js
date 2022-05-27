@@ -1,14 +1,17 @@
 import Axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function CreatePage() {
   Axios.defaults.withCredentials = true;
-  const [weight, setWeight] = useState("");
-  const [length, setLength] = useState("");
-  const [location, setLocation] = useState("");
-  const [picture, setPicture] = useState("");
-  const [caption, setCaption] = useState("");
-  const [speciesID, setSpeciesID] = useState("");
+  const [weight, setWeight] = useState(null);
+  const [length, setLength] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [picture, setPicture] = useState(null);
+  const [caption, setCaption] = useState(null);
+  const [speciesID, setSpeciesID] = useState(null);
+  const [message, setMessage] = useState(null);
+  const Router = useRouter();
 
   const create = () => {
     Axios.post("http://localhost:3001/post/create", {
@@ -19,8 +22,11 @@ export default function CreatePage() {
       caption: caption,
       speciesid: speciesID,
     }).then((response) => {
-      alert(response.data.message);
-      console.log(response.data);
+      if (response.data.posted === true) {
+        Router.push("/");
+      } else {
+        setMessage(response.data.message);
+      }
     });
   };
 
@@ -91,6 +97,8 @@ export default function CreatePage() {
           placeholder="Species ID"
         />
       </div>
+
+      <div>{message}</div>
 
       <button onClick={create}>Submit</button>
     </div>
