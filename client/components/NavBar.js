@@ -15,7 +15,7 @@ export default function NavBar() {
 
   return (
     <div className="w-full border-b border-red-300">
-      <div className="flex max-w-5xl justify-between mx-auto">
+      <div className="flex justify-between mx-5">
         <div className="flex">
           <div className="mr-5">
             <Link href="/">Home</Link>
