@@ -4,11 +4,9 @@ export default function SideBarIcon() {
   return (
     <div className="w-[50px] h-[54px] flex items-center">
       <Link href="/">
-        <button className="hover:bg-gray-200 p-2 rounded-full">
+        <button className="hover:bg-gray-200 p-2.5 rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            x="0px"
-            y="0px"
             width="30"
             height="30"
             viewBox="0 0 48 48"

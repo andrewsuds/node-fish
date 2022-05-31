@@ -10,7 +10,7 @@ export default function Home() {
   const [listOfPosts, setListOfPosts] = useState([]);
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/post/all").then((response) => {
+    Axios.get("http://10.0.0.202:3001/post/all").then((response) => {
       setListOfPosts(response.data);
     });
   }, []);
