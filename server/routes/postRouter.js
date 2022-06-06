@@ -6,7 +6,7 @@ const checkMiddleware = require("../middlewares/checkMiddleware");
 
 router.get("/all", postController.getPosts);
 router.use(checkMiddleware);
-router.post("/upload", multer.single("formId"), postController.uploadPicture);
-router.post("/create", postController.createPost);
+router.post("/upload", multer.single("picture"), postController.uploadPicture);
+router.post("/create", multer.single("picture"), postController.createPost);
 
 module.exports = router;

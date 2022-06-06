@@ -11,7 +11,7 @@ export default function SiteLayout({ children }) {
 
   useEffect(() => {
     Axios.get("http://localhost:3001/auth/login").then((response) => {
-      console.log(response);
+      console.log(response.data.username);
       setUser(response.data.username);
     });
   });
@@ -20,11 +20,13 @@ export default function SiteLayout({ children }) {
     <div className="max-w-7xl mx-auto">
       <div className="flex">
         <div className="flex-col hidden sm:block sm:w-[75px] xl:w-[275px]">
-          <div className="px-3">
+          <div className="px-3 top-0 sticky">
             <SideBarIcon />
             <SideBar name="Home" url="/" />
-            <SideBar name="Notifications" url="/create" />
-            <SideBar name="Profile" url="/login" />
+            <SideBar name="Search" url="/search" />
+            <SideBar name="Leaderboard" url="/leaderboard" />
+            <SideBar name="Map" url="/map" />
+            <SideBar name="Activity" url="/activity" />
             <SideBarCreate />
           </div>
         </div>
@@ -49,9 +51,7 @@ export default function SiteLayout({ children }) {
             <p>Copyright info</p>
           </div>
         </div>
-        <div className="sm:invisible w-full fixed bottom-0 bg-yellow-200">
-          Yo
-        </div>
+        <div className="sm:hidden w-full fixed bottom-0 bg-yellow-200">Yo</div>
       </div>
     </div>
   );

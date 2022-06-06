@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function SideBarCreate() {
   return (
     <div className="mt-4">
-      <Link href="/">
+      <Link href="/create">
         <button className="flex items-center bg-blue-400 hover:bg-blue-500 font-bold text-white shadow-md rounded-full p-2.5">
           <svg
             xmlns="http://www.w3.org/2000/svg"

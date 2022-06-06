@@ -16,11 +16,16 @@ async function uploadPicture(req, res) {
 function createPost(req, res) {
   const weight = req.body.weight;
   const length = req.body.length;
-  const location = req.body.location;
-  const picture = req.body.picture;
+  let location = null;
+  let picture = null;
   const caption = req.body.caption;
   const speciesid = req.body.speciesid;
   const accountid = req.session.accountid;
+
+  if (req.file) {
+    picture = req.file.filename;
+    location = exif.getGPS(picture);
+  }
 
   pool.query(
     "INSERT INTO post(weight, length, location, picture, caption, speciesid, accountid) VALUES($1,$2,$3,$4,$5,$6,$7);",

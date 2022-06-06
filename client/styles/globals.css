@@ -8,6 +8,7 @@
       Roboto, Helvetica, Arial, sans-serif;
   }
 
+  div,
   button {
     transition-property: background-color;
     transition-duration: 0.2s;
