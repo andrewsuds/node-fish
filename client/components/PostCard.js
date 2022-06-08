@@ -78,7 +78,7 @@ export default function PostCard(props) {
           </div>
           <div className="ml-1">{props.fish}</div>
         </div>
-        {props.caption != "null" && <div>{props.caption}</div>}
+        {props.caption != null && <div>{props.caption}</div>}
         {props.image !== null && (
           <div className="mt-2">
             <Image

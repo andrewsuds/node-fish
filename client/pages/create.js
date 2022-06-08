@@ -4,12 +4,12 @@ import { useRouter } from "next/router";
 
 export default function CreatePage() {
   Axios.defaults.withCredentials = true;
-  const [weight, setWeight] = useState(null);
-  const [length, setLength] = useState(null);
-  const [picture, setPicture] = useState(null);
-  const [caption, setCaption] = useState(null);
-  const [speciesID, setSpeciesID] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [weight, setWeight] = useState("");
+  const [length, setLength] = useState("");
+  const [picture, setPicture] = useState("");
+  const [caption, setCaption] = useState("");
+  const [speciesID, setSpeciesID] = useState("");
+  const [message, setMessage] = useState("");
   const Router = useRouter();
 
   const submit = () => {

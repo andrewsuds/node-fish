@@ -8,5 +8,7 @@ router.get("/all", postController.getPosts);
 router.use(checkMiddleware);
 router.post("/upload", multer.single("picture"), postController.uploadPicture);
 router.post("/create", multer.single("picture"), postController.createPost);
+router.post("/like", postController.toggleLike);
+router.post("/comment", postController.createComment);
 
 module.exports = router;

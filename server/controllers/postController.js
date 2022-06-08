@@ -15,16 +15,24 @@ async function uploadPicture(req, res) {
 
 function createPost(req, res) {
   const weight = req.body.weight;
-  const length = req.body.length;
-  let location = null;
-  let picture = null;
-  const caption = req.body.caption;
+  let length;
+  let location;
+  let picture;
+  let caption;
   const speciesid = req.body.speciesid;
   const accountid = req.session.accountid;
 
   if (req.file) {
     picture = req.file.filename;
     location = exif.getGPS(picture);
+  }
+
+  if (req.body.length) {
+    length = req.body.length;
+  }
+
+  if (req.body.caption) {
+    caption = req.body.caption;
   }
 
   pool.query(
@@ -58,4 +66,77 @@ function getPosts(req, res) {
   );
 }
 
-module.exports = { uploadPicture, createPost, getPosts };
+async function toggleLike(req, res) {
+  const postid = req.body.postid;
+  const likes = await pool.query(
+    "SELECT * FROM likes WHERE accountid = $1 AND postid = $2;",
+    [req.session.accountid, postid]
+  );
+
+  if (likes.rowCount > 0) {
+    pool.query(
+      "DELETE FROM likes WHERE accountid = $1 AND postid = $2;",
+      [req.session.accountid, postid],
+      (err, result) => {
+        if (err) {
+          console.log(err.message);
+          return res.json({ toggled: false });
+        }
+
+        if (result) {
+          return res.json({ toggled: true, liked: false });
+        }
+      }
+    );
+  }
+
+  if (likes.rowCount == 0) {
+    pool.query(
+      "INSERT INTO likes(accountid, postid, likedate) VALUES($1,$2,now());",
+      [req.session.accountid, postid],
+      (err, result) => {
+        if (err) {
+          console.log(err.message);
+          return res.json({ toggled: false });
+        }
+
+        if (result) {
+          return res.json({ toggled: true, liked: true });
+        }
+      }
+    );
+  }
+}
+
+function createComment(req, res) {
+  const postid = req.body.postid;
+  const comment = req.body.comment;
+  let replyTo;
+
+  if (req.body.replyTo) {
+    replyTo = req.body.replyTo;
+  }
+
+  pool.query(
+    "INSERT INTO comments(accountid, postid, comment, commentdate, replyTo) VALUES($1,$2,$3,now(),$4);",
+    [req.session.accountid, postid, comment, replyTo],
+    (err, result) => {
+      if (err) {
+        console.log(err.message);
+        return res.json({ commented: false });
+      }
+
+      if (result) {
+        return res.json({ commented: true, comment: comment });
+      }
+    }
+  );
+}
+
+module.exports = {
+  uploadPicture,
+  createPost,
+  getPosts,
+  toggleLike,
+  createComment,
+};
