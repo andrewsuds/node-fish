@@ -1,9 +1,17 @@
 import Image from "next/image";
 
+const handleClick = (event) => {
+  console.log(event.currentTarget.id);
+};
+
 export default function PostCard(props) {
   const imageURL = "http://localhost:3001/images/" + props.image;
   return (
-    <div className="flex px-4 py-2 border-t border-gray-300 hover:bg-gray-100">
+    <div
+      id={props.postid}
+      className="flex px-4 py-2 border-t border-gray-300 hover:bg-gray-100"
+      onClick={handleClick}
+    >
       <div className="mr-3">
         <Image
           src="http://localhost:3001/images/ufc.jpg"
@@ -90,6 +98,14 @@ export default function PostCard(props) {
             />
           </div>
         )}
+        <div className="flex">
+          {props.isliked == 1 ? (
+            <div className="font-bold">{props.likecount} Likes</div>
+          ) : (
+            <div className="">{props.likecount} Likes</div>
+          )}
+          <div className="ml-10">{props.commentcount} Comments</div>
+        </div>
       </div>
     </div>
   );

@@ -10,8 +10,25 @@ export default function Home() {
 
   const [listOfPosts, setListOfPosts] = useState([]);
 
+  const test = (id) => {
+    const newList = listOfPosts.map((item) => {
+      if (item.postid == id) {
+        const updatedItem = {
+          ...item,
+          isliked: 1,
+        };
+
+        return updatedItem;
+      }
+
+      return item;
+    });
+
+    setListOfPosts(newList);
+  };
+
   useEffect(() => {
-    Axios.get("http://10.0.0.202:3001/post/all").then((response) => {
+    Axios.get("http://localhost:3001/post/all").then((response) => {
       setListOfPosts(response.data);
     });
   }, []);
@@ -19,7 +36,7 @@ export default function Home() {
   return (
     <div>
       <div className="top-0 sticky text-black backdrop-blur-lg bg-white/80 h-14 z-[1] flex items-center px-4">
-        <div className="w-[35px] h-[35px]">
+        <div className="w-[35px] h-[35px]" onClick={() => test(65)}>
           <Image
             src="http://localhost:3001/images/ufc.jpg"
             className="rounded-full"
@@ -33,6 +50,7 @@ export default function Home() {
       {listOfPosts.map((value) => {
         return (
           <PostCard
+            postid={value.postid}
             username={value.username}
             image={value.picture}
             location={value.location}
@@ -40,6 +58,9 @@ export default function Home() {
             length={value.length}
             fish={value.species}
             caption={value.caption}
+            likecount={value.likecount}
+            commentcount={value.commentcount}
+            isliked={value.isliked}
           />
         );
       })}

@@ -1,18 +1,6 @@
 const pool = require("../helpers/db");
 const exif = require("../helpers/exif");
 
-async function uploadPicture(req, res) {
-  const filename = await req.file.filename;
-
-  const coordinates = exif.getGPS(filename);
-
-  return res.json({
-    message: "Image succesfully uploaded!",
-    filename: filename,
-    location: coordinates,
-  });
-}
-
 function createPost(req, res) {
   const weight = req.body.weight;
   let length;
@@ -52,7 +40,15 @@ function createPost(req, res) {
 
 function getPosts(req, res) {
   pool.query(
-    "SELECT postid, username, species, weight, length, caption, picture, location FROM post INNER JOIN account on post.accountid = account.accountid INNER JOIN species on post.speciesid = species.speciesid ORDER BY postid DESC;",
+    `SELECT postid, username, species, weight, length, caption, picture, location,
+    (select count(likes) as likecount from likes where postid = post.postid),
+    (select count(comments) as commentcount from comments where post.postid = postid),
+    (select count(likes) as isliked from likes where postid = post.postid AND accountid = $1)
+    FROM post
+    INNER JOIN account on post.accountid = account.accountid
+    INNER JOIN species on post.speciesid = species.speciesid
+    ORDER BY postid DESC;`,
+    [req.session.accountid],
     (err, result) => {
       if (err) {
         console.log(err.message);
@@ -134,7 +130,6 @@ function createComment(req, res) {
 }
 
 module.exports = {
-  uploadPicture,
   createPost,
   getPosts,
   toggleLike,
