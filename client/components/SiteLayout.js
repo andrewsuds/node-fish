@@ -19,19 +19,17 @@ export default function SiteLayout({ children }) {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="flex">
-        <div className="flex-col hidden sm:block sm:w-[75px] xl:w-[275px]">
-          <div className="px-3 top-0 sticky">
-            <SideBarIcon />
-            <SideBar name="Home" url="/" />
-            <SideBar name="Search" url="/search" />
-            <SideBar name="Leaderboard" url="/leaderboard" />
-            <SideBar name="Map" url="/map" />
-            <SideBar name="Activity" url="/activity" />
-            <SideBarCreate />
-          </div>
+        <div className="flex-col fixed top-0 bottom-0 hidden overflow-y-auto sm:block sm:w-[75px] xl:w-[275px] px-3">
+          <SideBarIcon />
+          <SideBar name="Home" url="/" />
+          <SideBar name="Search" url="/search" />
+          <SideBar name="Leaderboard" url="/leaderboard" />
+          <SideBar name="Map" url="/map" />
+          <SideBar name="Activity" url="/activity" />
+          <SideBarCreate />
         </div>
 
-        <div className="flex-1 border-x border-gray-300 min-h-screen">
+        <div className="sm:ml-[75px] xl:ml-[275px] flex-1 border-x border-gray-300 min-h-screen">
           {children}
         </div>
 

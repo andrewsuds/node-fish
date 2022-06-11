@@ -62,14 +62,11 @@ function getPosts(req, res) {
   );
 }
 
-async function toggleLike(req, res) {
+function toggleLike(req, res) {
   const postid = req.body.postid;
-  const likes = await pool.query(
-    "SELECT * FROM likes WHERE accountid = $1 AND postid = $2;",
-    [req.session.accountid, postid]
-  );
+  const isliked = req.body.isliked;
 
-  if (likes.rowCount > 0) {
+  if (isliked == 1) {
     pool.query(
       "DELETE FROM likes WHERE accountid = $1 AND postid = $2;",
       [req.session.accountid, postid],
@@ -86,7 +83,7 @@ async function toggleLike(req, res) {
     );
   }
 
-  if (likes.rowCount == 0) {
+  if (isliked == 0) {
     pool.query(
       "INSERT INTO likes(accountid, postid, likedate) VALUES($1,$2,now());",
       [req.session.accountid, postid],

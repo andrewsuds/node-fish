@@ -1,35 +1,18 @@
 import Head from "next/head";
 import Image from "next/image";
 import NavBar from "../components/NavBar";
+import { HomeFeedContext } from "../lib/HomeFeedContext";
 import Axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import PostCard from "../components/PostCard";
 
 export default function Home() {
   Axios.defaults.withCredentials = true;
-
-  const [listOfPosts, setListOfPosts] = useState([]);
-
-  const test = (id) => {
-    const newList = listOfPosts.map((item) => {
-      if (item.postid == id) {
-        const updatedItem = {
-          ...item,
-          isliked: 1,
-        };
-
-        return updatedItem;
-      }
-
-      return item;
-    });
-
-    setListOfPosts(newList);
-  };
+  const { homeFeed, setHomeFeed } = useContext(HomeFeedContext);
 
   useEffect(() => {
     Axios.get("http://localhost:3001/post/all").then((response) => {
-      setListOfPosts(response.data);
+      setHomeFeed(response.data);
     });
   }, []);
 
@@ -47,7 +30,7 @@ export default function Home() {
         <div className="font-bold text-xl ml-[26px]">Home</div>
       </div>
 
-      {listOfPosts.map((value) => {
+      {homeFeed.map((value) => {
         return (
           <PostCard
             postid={value.postid}

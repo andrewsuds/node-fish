@@ -1,17 +1,51 @@
 import Image from "next/image";
-
-const handleClick = (event) => {
-  console.log(event.currentTarget.id);
-};
+import { useContext } from "react";
+import { HomeFeedContext } from "../lib/HomeFeedContext";
+import Axios from "axios";
 
 export default function PostCard(props) {
+  Axios.defaults.withCredentials = true;
+  const { homeFeed, setHomeFeed } = useContext(HomeFeedContext);
+
+  const requestToggleLike = (id, isliked) => {
+    Axios.post("http://localhost:3001/post/like", {
+      postid: id,
+      isliked: isliked,
+    }).then((response) => {
+      console.log(response.data);
+    });
+  };
+
+  const toggleLike = (id) => {
+    console.log("You passed: " + id);
+    const newList = homeFeed.map((item) => {
+      if (item.postid == id) {
+        let updatedItem;
+        if (item.isliked == 0) {
+          updatedItem = {
+            ...item,
+            isliked: 1,
+          };
+          requestToggleLike(id, 0);
+        } else {
+          updatedItem = {
+            ...item,
+            isliked: 0,
+          };
+          requestToggleLike(id, 1);
+        }
+
+        return updatedItem;
+      }
+
+      return item;
+    });
+    setHomeFeed(newList);
+  };
   const imageURL = "http://localhost:3001/images/" + props.image;
+
   return (
-    <div
-      id={props.postid}
-      className="flex px-4 py-2 border-t border-gray-300 hover:bg-gray-100"
-      onClick={handleClick}
-    >
+    <div className="flex px-4 py-2 border-t border-gray-300 hover:bg-gray-100">
       <div className="mr-3">
         <Image
           src="http://localhost:3001/images/ufc.jpg"
@@ -100,9 +134,13 @@ export default function PostCard(props) {
         )}
         <div className="flex">
           {props.isliked == 1 ? (
-            <div className="font-bold">{props.likecount} Likes</div>
+            <div className="font-bold" onClick={() => toggleLike(props.postid)}>
+              {props.likecount} Likes
+            </div>
           ) : (
-            <div className="">{props.likecount} Likes</div>
+            <div className="" onClick={() => toggleLike(props.postid)}>
+              {props.likecount} Likes
+            </div>
           )}
           <div className="ml-10">{props.commentcount} Comments</div>
         </div>
