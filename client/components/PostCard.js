@@ -1,11 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useContext } from "react";
-import { HomeFeedContext } from "../lib/HomeFeedContext";
+import { PostContext } from "../lib/PostContext";
 import Axios from "axios";
 
 export default function PostCard(props) {
   Axios.defaults.withCredentials = true;
-  const { homeFeed, setHomeFeed } = useContext(HomeFeedContext);
+  const { postList, setPostList } = useContext(PostContext);
 
   const requestToggleLike = (id, isliked) => {
     Axios.post("http://localhost:3001/post/like", {
@@ -18,34 +19,38 @@ export default function PostCard(props) {
 
   const toggleLike = (id) => {
     console.log("You passed: " + id);
-    const newList = homeFeed.map((item) => {
+    const newList = postList.map((item) => {
       if (item.postid == id) {
-        let updatedItem;
         if (item.isliked == 0) {
-          updatedItem = {
+          requestToggleLike(id, 0);
+          return {
             ...item,
             isliked: 1,
+            likecount: parseInt(item.likecount) + 1,
           };
-          requestToggleLike(id, 0);
-        } else {
-          updatedItem = {
-            ...item,
-            isliked: 0,
-          };
-          requestToggleLike(id, 1);
         }
 
-        return updatedItem;
+        if (item.isliked == 1) {
+          requestToggleLike(id, 1);
+          return {
+            ...item,
+            isliked: 0,
+            likecount: parseInt(item.likecount) - 1,
+          };
+        }
       }
 
       return item;
     });
-    setHomeFeed(newList);
+    setPostList(newList);
   };
   const imageURL = "http://localhost:3001/images/" + props.image;
 
   return (
-    <div className="flex px-4 py-2 border-t border-gray-300 hover:bg-gray-100">
+    <div
+      className="flex px-4 py-2 border-t border-gray-300 hover:bg-gray-100"
+      id={props.postid}
+    >
       <div className="mr-3">
         <Image
           src="http://localhost:3001/images/ufc.jpg"
@@ -57,7 +62,12 @@ export default function PostCard(props) {
       </div>
       <div className="">
         <div className="flex">
-          <div className="font-bold">{props.username}</div>
+          <Link href={`/${props.username}`}>
+            <div className="font-bold hover:underline hover:cursor-pointer">
+              {props.username}
+            </div>
+          </Link>
+
           {props.location !== null && (
             <div className="ml-1 text-gray-500">• {props.location}</div>
           )}
@@ -142,7 +152,9 @@ export default function PostCard(props) {
               {props.likecount} Likes
             </div>
           )}
-          <div className="ml-10">{props.commentcount} Comments</div>
+          <Link href={`/${props.username}/post/${props.postid}`}>
+            <div className="ml-10">{props.commentcount} Comments</div>
+          </Link>
         </div>
       </div>
     </div>

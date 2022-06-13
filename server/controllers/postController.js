@@ -38,6 +38,32 @@ function createPost(req, res) {
   );
 }
 
+function getOnePost(req, res) {
+  const postid = req.params.postid;
+  pool.query(
+    `SELECT postid, username, species, weight, length, caption, picture, location,
+    (select count(likes) as likecount from likes where postid = post.postid),
+    (select count(comments) as commentcount from comments where post.postid = postid),
+    (select count(likes) as isliked from likes where postid = post.postid AND accountid = $1)
+    FROM post
+    INNER JOIN account on post.accountid = account.accountid
+    INNER JOIN species on post.speciesid = species.speciesid
+    WHERE postid = $2
+    ORDER BY postid DESC;`,
+    [req.session.accountid, postid],
+    (err, result) => {
+      if (err) {
+        console.log(err.message);
+        return res.json({ message: err.message });
+      }
+
+      if (result) {
+        return res.json(result.rows[0]);
+      }
+    }
+  );
+}
+
 function getPosts(req, res) {
   pool.query(
     `SELECT postid, username, species, weight, length, caption, picture, location,
@@ -49,6 +75,32 @@ function getPosts(req, res) {
     INNER JOIN species on post.speciesid = species.speciesid
     ORDER BY postid DESC;`,
     [req.session.accountid],
+    (err, result) => {
+      if (err) {
+        console.log(err.message);
+        return res.json({ message: err.message });
+      }
+
+      if (result) {
+        return res.json(result.rows);
+      }
+    }
+  );
+}
+
+function getProfilePosts(req, res) {
+  const username = req.params.username;
+  pool.query(
+    `SELECT postid, username, species, weight, length, caption, picture, location,
+    (select count(likes) as likecount from likes where postid = post.postid),
+    (select count(comments) as commentcount from comments where post.postid = postid),
+    (select count(likes) as isliked from likes where postid = post.postid AND accountid = $1)
+    FROM post
+    INNER JOIN account on post.accountid = account.accountid
+    INNER JOIN species on post.speciesid = species.speciesid
+    WHERE username = $2
+    ORDER BY postid DESC;`,
+    [req.session.accountid, username],
     (err, result) => {
       if (err) {
         console.log(err.message);
@@ -127,8 +179,10 @@ function createComment(req, res) {
 }
 
 module.exports = {
-  createPost,
+  getOnePost,
   getPosts,
+  getProfilePosts,
+  createPost,
   toggleLike,
   createComment,
 };

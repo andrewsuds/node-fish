@@ -4,7 +4,9 @@ const multer = require("../helpers/multer");
 const postController = require("../controllers/postController");
 const checkMiddleware = require("../middlewares/checkMiddleware");
 
+router.get("/one/:postid", postController.getOnePost);
 router.get("/all", postController.getPosts);
+router.get("/profile/:username", postController.getProfilePosts);
 router.use(checkMiddleware);
 router.post("/create", multer.single("picture"), postController.createPost);
 router.post("/like", postController.toggleLike);

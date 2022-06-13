@@ -1,26 +1,30 @@
-import Head from "next/head";
+import { useRouter } from "next/router";
 import Image from "next/image";
-import NavBar from "../components/NavBar";
-import { PostContext } from "../lib/PostContext";
+import { useContext, useEffect } from "react";
 import Axios from "axios";
-import { useEffect, useContext } from "react";
-import PostCard from "../components/PostCard";
-import Link from "next/link";
+import PostCard from "../../components/PostCard";
+import { PostContext } from "../../lib/PostContext";
 
-export default function Home() {
+export default function ProfilePage() {
   Axios.defaults.withCredentials = true;
+  const Router = useRouter();
+
   const { postList, setPostList } = useContext(PostContext);
 
+  const { username } = Router.query;
   useEffect(() => {
-    Axios.get("http://localhost:3001/post/all").then((response) => {
-      setPostList(response.data);
-    });
-  }, []);
+    if (!Router.isReady) return;
+    Axios.get(`http://localhost:3001/post/profile/${username}`).then(
+      (response) => {
+        setPostList(response.data);
+      }
+    );
+  }, [Router.isReady]);
 
   return (
     <div>
       <div className="top-0 sticky text-black backdrop-blur-lg bg-white/80 h-14 z-[1] flex items-center px-4">
-        <div className="w-[35px] h-[35px]">
+        <div className="w-[35px] h-[35px]" onClick={() => Router.back()}>
           <Image
             src="http://localhost:3001/images/ufc.jpg"
             className="rounded-full"
@@ -28,7 +32,7 @@ export default function Home() {
             height={35}
           />
         </div>
-        <div className="font-bold text-xl ml-[26px]">Home</div>
+        <div className="font-bold text-xl ml-[26px]">Profile</div>
       </div>
 
       {postList.map((value) => {

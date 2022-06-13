@@ -1,25 +1,21 @@
 import "../styles/globals.css";
 import SiteLayout from "../components/SiteLayout";
 import { UserContext } from "../lib/UserContext";
-import { HomeFeedContext } from "../lib/HomeFeedContext";
+import { PostContext } from "../lib/PostContext";
 import { useState, useMemo } from "react";
 
 function App({ Component, pageProps }) {
   const [user, setUser] = useState(null);
-  const [homeFeed, setHomeFeed] = useState([]);
+  const [postList, setPostList] = useState([]);
   const providerUser = useMemo(() => ({ user, setUser }), [user, setUser]);
-  const providerHomeFeed = useMemo(
-    () => ({ homeFeed, setHomeFeed }),
-    [homeFeed, setHomeFeed]
-  );
 
   return (
     <UserContext.Provider value={providerUser}>
-      <HomeFeedContext.Provider value={providerHomeFeed}>
+      <PostContext.Provider value={{ postList, setPostList }}>
         <SiteLayout>
           <Component {...pageProps} />
         </SiteLayout>
-      </HomeFeedContext.Provider>
+      </PostContext.Provider>
     </UserContext.Provider>
   );
 }
