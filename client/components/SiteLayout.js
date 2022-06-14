@@ -1,21 +1,8 @@
-import { UserContext } from "../lib/UserContext";
-import { useEffect, useContext } from "react";
-import Axios from "axios";
 import SideBar from "./SideBar";
 import SideBarIcon from "./SideBarIcon";
 import SideBarCreate from "./SideBarCreate";
 
 export default function SiteLayout({ children }) {
-  const { user, setUser } = useContext(UserContext);
-  Axios.defaults.withCredentials = true;
-
-  useEffect(() => {
-    Axios.get("http://localhost:3001/auth/login").then((response) => {
-      console.log(response.data.username);
-      setUser(response.data.username);
-    });
-  });
-
   return (
     <div className="max-w-7xl mx-auto">
       <div className="flex">

@@ -1,11 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Axios from "axios";
-import PostCard from "../../../components/PostCard";
 
 export default function ProfilePostPage() {
   const Router = useRouter();
-  const [post, setPost] = useState({});
+  const [post, setPost] = useState([]);
 
   const { username, postid } = Router.query;
   useEffect(() => {
@@ -14,13 +13,12 @@ export default function ProfilePostPage() {
       setPost(response.data);
     });
   }, [Router.isReady]);
-  const handleClick = (e) => {
-    console.log(e.currentTarget.id);
-  };
+
   return (
     <div>
       <p>{username}</p>
       <p>{postid}</p>
+      <p>{post.caption}</p>
     </div>
   );
 }
