@@ -121,19 +121,30 @@ export default function Home() {
               )}
 
               <div className="flex items-center text-gray-500 text-sm ml-[-7px]">
-                <div className="flex items-center hover:text-red-500 hover:cursor-pointer">
-                  <div className="hover:bg-red-100 rounded-full p-2">
-                    <FaRegHeart size={16} />
-                  </div>
+                <div
+                  className="flex items-center hover:text-red-500 group hover:cursor-pointer"
+                  onClick={() => toggleLike(value.postid)}
+                >
+                  {value.isliked == 0 ? (
+                    <div className="group-hover:bg-red-100 rounded-full p-2">
+                      <FaRegHeart size={16} />
+                    </div>
+                  ) : (
+                    <div className="group-hover:bg-red-100 text-red-500 rounded-full p-2">
+                      <FaHeart size={16} />
+                    </div>
+                  )}
                   <div className="ml-1 mr-6">{value.likecount} Likes</div>
                 </div>
 
-                <div className="flex items-center hover:text-blue-500 hover:cursor-pointer">
-                  <div className="hover:bg-blue-100 rounded-full p-2">
-                    <MdOutlineBubbleChart size={18} />
+                <Link href={`/${value.username}/post/${value.postid}`}>
+                  <div className="flex items-center hover:text-blue-500 group hover:cursor-pointer">
+                    <div className="group-hover:bg-blue-100 rounded-full p-2">
+                      <MdOutlineBubbleChart size={18} />
+                    </div>
+                    <div className="ml-1">{value.commentcount} Comments</div>
                   </div>
-                  <div className="ml-1">{value.commentcount} Comments</div>
-                </div>
+                </Link>
               </div>
             </div>
           </div>
