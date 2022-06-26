@@ -28,6 +28,13 @@ app.use(
     secret: "thisIsMySecret",
     resave: false,
     saveUninitialized: false,
+    proxy: true,
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      expires: 1000 * 60 * 60 * 24 * 365,
+      sameSite: "none",
+    },
   })
 );
 
