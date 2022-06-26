@@ -10,7 +10,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://fishbucket.netlify.app",
+    methods: ["GET", "POST", "DELETE", "PUT"],
+    credentials: true,
+  })
+);
 
 app.set("trust proxy", 1);
 
@@ -20,16 +26,14 @@ app.use(
       pool: pool,
       tableName: "session",
     }),
-    name: "sessionId",
+    name: "sessId",
     secret: "thisIsMySecret",
     resave: false,
     saveUninitialized: false,
-    proxy: true,
     cookie: {
       secure: true,
       httpOnly: true,
       expires: 1000 * 60 * 60 * 24 * 365,
-      sameSite: "none",
     },
   })
 );
