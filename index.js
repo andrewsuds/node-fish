@@ -35,7 +35,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: true,
-      httpOnly: false,
+      httpOnly: true,
       domain: ".aks22.com",
       expires: 1000 * 60 * 60 * 24 * 365,
     },
