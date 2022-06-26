@@ -12,8 +12,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: true,
+    origin: ["http://localhost:3000", "https://fish-l0pa.onrender.com"],
     credentials: true,
+    exposedHeaders: ["set-cookie"],
   })
 );
 
