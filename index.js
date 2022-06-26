@@ -49,7 +49,7 @@ app.use("/auth", authRouter);
 app.use("/post", postRouter);
 
 // SERVE IMAGES
-app.use(express.static("public"));
+app.use(express.static("/public"));
 
 // RUN APP
 app.listen(process.env.PORT || 3001, () => {
