@@ -13,7 +13,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: "https://fishbucket.netlify.app",
-    methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
 );
@@ -32,7 +31,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: true,
-      httpOnly: true,
+      httpOnly: false,
       expires: 1000 * 60 * 60 * 24 * 365,
     },
   })
