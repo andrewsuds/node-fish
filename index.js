@@ -12,8 +12,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://fish-l0pa.onrender.com",
+    origin: ["http://localhost:3000", "https://fishbucket.netlify.app"],
     credentials: true,
+    exposedHeaders: ["set-cookie"],
   })
 );
 
