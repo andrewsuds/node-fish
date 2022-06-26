@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://fishbucket.netlify.app",
+    origin: true,
     credentials: true,
   })
 );
