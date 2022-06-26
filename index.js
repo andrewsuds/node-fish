@@ -10,13 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "https://fishbucket.netlify.app"],
-    methods: ["GET", "POST", "DELETE", "PUT"],
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.set("trust proxy", 1);
 
