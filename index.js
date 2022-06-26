@@ -29,13 +29,14 @@ app.use(
       pool: pool,
       tableName: "session",
     }),
-    name: "sessId",
+    name: "sessionId",
     secret: "thisIsMySecret",
     resave: false,
     saveUninitialized: false,
     cookie: {
       secure: true,
       httpOnly: false,
+      domain: ".aks22.com",
       expires: 1000 * 60 * 60 * 24 * 365,
     },
   })
