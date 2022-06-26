@@ -14,7 +14,6 @@ app.use(
   cors({
     origin: "https://fish-l0pa.onrender.com",
     credentials: true,
-    exposedHeaders: ["set-cookie"],
   })
 );
 
