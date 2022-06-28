@@ -200,6 +200,19 @@ function getPostComments(req, res) {
   );
 }
 
+function getSpecies(req, res) {
+  pool.query("SELECT * FROM species;", (err, result) => {
+    if (err) {
+      console.log(err.message);
+      return res.json({ message: err.message });
+    }
+
+    if (result) {
+      return res.json(result.rows);
+    }
+  });
+}
+
 module.exports = {
   getOnePost,
   getPosts,
@@ -208,4 +221,5 @@ module.exports = {
   createPost,
   toggleLike,
   createComment,
+  getSpecies,
 };
