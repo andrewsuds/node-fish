@@ -15,7 +15,6 @@ app.use(
     origin: [
       "https://fish.aks22.com",
       "https://fishbucket.netlify.app",
-      "http://dev.aks22.com:3000",
       "http://localhost:3000",
     ],
     credentials: true,
@@ -37,7 +36,7 @@ app.use(
     cookie: {
       secure: false,
       httpOnly: true,
-      domain: ".aks22.com",
+      //domain: ".aks22.com",
       expires: 1000 * 60 * 60 * 24 * 365,
     },
   })
