@@ -34,9 +34,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
       httpOnly: true,
-      //domain: ".aks22.com",
+      secure: process.env.PRODUCTION == "true" ? true : false,
+      domain: process.env.PRODUCTION == "true" ? ".aks22.com" : "localhost",
       expires: 1000 * 60 * 60 * 24 * 365,
     },
   })
