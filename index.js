@@ -45,11 +45,17 @@ app.use(
 // ROUTES
 const authRouter = require("./routes/authRouter");
 const postRouter = require("./routes/postRouter");
+const commentRouter = require("./routes/commentRouter");
+const profileRouter = require("./routes/profileRouter");
+const leaderboardRouter = require("./routes/leaderboardRouter");
 app.use("/auth", authRouter);
 app.use("/post", postRouter);
+app.use("/comment", commentRouter);
+app.use("/profile", profileRouter);
+app.use("/leaderboard", leaderboardRouter);
 
-// SERVE IMAGES
-app.use(express.static("/public"));
+// SERVE IMAGES & AVATARS
+app.use(express.static("./public"));
 
 // RUN APP
 app.listen(process.env.PORT || 3001, () => {

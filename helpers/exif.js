@@ -4,7 +4,7 @@ const piexif = require("piexifjs");
 function getGPS(filename) {
   try {
     const exif = piexif.load(
-      fs.readFileSync(`/public/images/${filename}`).toString("binary")
+      fs.readFileSync(`./public/images/${filename}`).toString("binary")
     );
 
     const latitude = exif["GPS"][piexif.GPSIFD.GPSLatitude];
