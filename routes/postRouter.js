@@ -9,6 +9,7 @@ router.get("/all", postController.getPosts);
 router.get("/species", postController.getSpecies);
 router.use(checkMiddleware);
 router.post("/like", postController.toggleLike);
+router.post("/delete", postController.deletePost);
 router.post(
   "/create",
   multerImage.single("picture"),

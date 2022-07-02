@@ -140,10 +140,38 @@ function getSpecies(req, res) {
   });
 }
 
+async function deletePost(req, res) {
+  const postid = req.body.postid;
+  try {
+    const postAccount = await pool.query(
+      "SELECT accountid FROM post WHERE postid = $1;",
+      [postid]
+    );
+
+    if (postAccount.rows[0].accountid != req.session.accountid) {
+      return res.json({
+        deleted: false,
+        message: "Not authorized to delete this post!",
+      });
+    }
+    await pool.query("DELETE FROM comments WHERE postid = $1;", [postid]);
+    await pool.query("DELETE FROM likes WHERE postid = $1;", [postid]);
+    await pool.query("DELETE FROM post WHERE postid = $1;", [postid]);
+    return res.json({ deleted: true });
+  } catch (err) {
+    console.log(err);
+    return res.json({
+      deleted: false,
+      message: "Error deleting post. Try again.",
+    });
+  }
+}
+
 module.exports = {
   getOnePost,
   getPosts,
   createPost,
   toggleLike,
   getSpecies,
+  deletePost,
 };

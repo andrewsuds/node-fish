@@ -10,7 +10,7 @@ function attemptRegister(req, res) {
   bcrypt.hash(password, 10, (err, hash) => {
     if (err) {
       console.log(err);
-      return res.json({ message: "Error" });
+      return res.json({ registered: false, message: "Error in registration" });
     }
 
     pool.query(
@@ -19,10 +19,13 @@ function attemptRegister(req, res) {
       (err, result) => {
         if (err) {
           console.log(err.message);
-          return res.json({ message: err.message });
+          return res.json({ registered: false, message: err.message });
         }
         if (result) {
-          return res.json({ message: "Success" });
+          return res.json({
+            registered: true,
+            message: "Success! You can now log in.",
+          });
         }
       }
     );
@@ -38,25 +41,29 @@ async function attemptLogin(req, res) {
     [username]
   );
 
-  if (potentialLogin.rowCount > 0) {
-    const isSamePass = await bcrypt.compare(
-      password,
-      potentialLogin.rows[0].password
-    );
+  if (potentialLogin.rowCount == 0) {
+    return res.json({
+      loggedIn: false,
+      message: "Incorrect username or password - This means no account found",
+    });
+  }
 
-    if (isSamePass) {
-      req.session.accountid = potentialLogin.rows[0].accountid;
-      req.session.username = potentialLogin.rows[0].username;
-      return res.json({
-        loggedIn: true,
-        message: potentialLogin.rows[0].username,
-      });
-    } else {
-      return res.json({ message: "Incorrect username or password" });
-    }
+  const samePass = await bcrypt.compare(
+    password,
+    potentialLogin.rows[0].password
+  );
+
+  if (samePass) {
+    req.session.accountid = potentialLogin.rows[0].accountid;
+    req.session.username = potentialLogin.rows[0].username;
+    return res.json({
+      loggedIn: true,
+      message: potentialLogin.rows[0].username,
+    });
   } else {
     return res.json({
-      message: "Incorrect username or password - This means no account found",
+      loggedIn: false,
+      message: "Incorrect username or password",
     });
   }
 }
