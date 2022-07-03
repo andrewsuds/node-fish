@@ -128,7 +128,7 @@ function toggleLike(req, res) {
 }
 
 function getSpecies(req, res) {
-  pool.query("SELECT * FROM species;", (err, result) => {
+  pool.query("SELECT * FROM species ORDER BY species ASC;", (err, result) => {
     if (err) {
       console.log(err.message);
       return res.json({ message: err.message });

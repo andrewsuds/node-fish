@@ -28,14 +28,14 @@ function getProfilePosts(req, res) {
 
 function getActivity(req, res) {
   pool.query(
-    `SELECT likedate as activitydate, post.postid, username, type from likes
+    `SELECT now()-likedate as activitydate, post.postid, username, type from likes
     INNER JOIN post on likes.postid = post.postid
     INNER JOIN account on likes.accountid = account.accountid
     WHERE post.accountid = $1 AND likes.accountid <> $1
 
     UNION ALL
 
-    SELECT commentdate as activitydate, post.postid, username, type from comments
+    SELECT now()-commentdate as activitydate, post.postid, username, type from comments
     INNER JOIN post on comments.postid = post.postid
     INNER JOIN account on comments.accountid = account.accountid
     WHERE post.accountid = $1 AND comments.accountid <> $1
