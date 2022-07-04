@@ -41,7 +41,7 @@ function createPost(req, res) {
 function getOnePost(req, res) {
   const postid = req.params.postid;
   pool.query(
-    `SELECT postid, username, species, weight, length, caption, picture, location, postdate,
+    `SELECT postid, username, avatar, species, weight, length, caption, picture, location, postdate,
     (select count(likes) as likecount from likes where postid = post.postid),
     (select count(comments) as commentcount from comments where post.postid = postid),
     (select count(likes) as isliked from likes where postid = post.postid AND accountid = $1)
@@ -66,7 +66,7 @@ function getOnePost(req, res) {
 
 function getPosts(req, res) {
   pool.query(
-    `SELECT postid, username, species, weight, length, caption, picture, location, postdate,
+    `SELECT postid, username, avatar, species, weight, length, caption, picture, location, now()-postdate as postdate,
     (select count(likes) as likecount from likes where postid = post.postid),
     (select count(comments) as commentcount from comments where post.postid = postid),
     (select count(likes) as isliked from likes where postid = post.postid AND accountid = $1)
