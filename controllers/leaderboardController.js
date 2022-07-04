@@ -3,7 +3,7 @@ const pool = require("../helpers/db");
 function getTotalWeight(req, res) {
   const hours = req.params.hours;
   pool.query(
-    `SELECT username, CONCAT(sum(weight), ' lbs') as value FROM post
+    `SELECT username, CONCAT(sum(weight), ' total lbs') as value FROM post
     INNER JOIN account on post.accountid = account.accountid
     WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
     group by username
@@ -82,7 +82,7 @@ function getSmallest(req, res) {
 function getLongest(req, res) {
   const hours = req.params.hours;
   pool.query(
-    `SELECT username, CONCAT(max(length), ' in.') as value FROM post
+    `SELECT username, CONCAT(max(length), '"') as value FROM post
     INNER JOIN account on post.accountid = account.accountid
     WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
     group by username
