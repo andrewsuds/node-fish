@@ -37,7 +37,7 @@ async function attemptLogin(req, res) {
   const password = req.body.password;
 
   const potentialLogin = await pool.query(
-    "SELECT accountid, username, password FROM account WHERE username = $1;",
+    "SELECT password, accountid, username, avatar FROM account WHERE username = $1;",
     [username]
   );
 
@@ -56,9 +56,11 @@ async function attemptLogin(req, res) {
   if (samePass) {
     req.session.accountid = potentialLogin.rows[0].accountid;
     req.session.username = potentialLogin.rows[0].username;
+    req.session.avatar = potentialLogin.rows[0].avatar;
     return res.json({
       loggedIn: true,
-      message: potentialLogin.rows[0].username,
+      username: potentialLogin.rows[0].username,
+      avatar: potentialLogin.rows[0].avatar,
     });
   } else {
     return res.json({
@@ -72,7 +74,11 @@ function checkLogin(req, res) {
   if (!req.session || !req.session.accountid) {
     return res.json({ loggedIn: false });
   } else {
-    return res.json({ loggedIn: true, username: req.session.username });
+    return res.json({
+      loggedIn: true,
+      username: req.session.username,
+      avatar: req.session.avatar,
+    });
   }
 }
 
