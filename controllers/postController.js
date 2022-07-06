@@ -1,10 +1,12 @@
 const pool = require("../helpers/db");
 const exif = require("../helpers/exif");
+const Axios = require("axios");
 
-function createPost(req, res) {
+async function createPost(req, res) {
   const weight = req.body.weight;
   let length;
   let location;
+  let coordinate;
   let picture;
   let caption;
   const speciesid = req.body.speciesid;
@@ -12,7 +14,16 @@ function createPost(req, res) {
 
   if (req.file) {
     picture = req.file.filename;
-    location = exif.getGPS(picture);
+    coordinate = exif.getGPS(picture);
+
+    if (coordinate) {
+      await Axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinate}&key=AIzaSyAenWeh1FBP1pV1LZvHsDCG6B1PJVgCjXQ`
+      ).then((response) => {
+        const text = response.data.plus_code.compound_code;
+        location = text.substring(9, text.length - 5);
+      });
+    }
   }
 
   if (req.body.length) {
@@ -24,8 +35,17 @@ function createPost(req, res) {
   }
 
   pool.query(
-    "INSERT INTO post(weight, length, location, picture, caption, speciesid, accountid, postdate) VALUES($1,$2,$3,$4,$5,$6,$7,now());",
-    [weight, length, location, picture, caption, speciesid, accountid],
+    "INSERT INTO post(weight, length, location, picture, caption, speciesid, accountid, postdate, coordinate) VALUES($1,$2,$3,$4,$5,$6,$7,now(),$8);",
+    [
+      weight,
+      length,
+      location,
+      picture,
+      caption,
+      speciesid,
+      accountid,
+      coordinate,
+    ],
     (err, result) => {
       if (err) {
         console.log(err.message);
