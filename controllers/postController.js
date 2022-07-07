@@ -18,7 +18,7 @@ async function createPost(req, res) {
 
     if (coordinate) {
       await Axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinate}&key=AIzaSyAenWeh1FBP1pV1LZvHsDCG6B1PJVgCjXQ`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinate}&key=${process.env.MAPKEY}`
       ).then((response) => {
         const text = response.data.plus_code.compound_code;
         location = text.substring(9, text.length - 5);

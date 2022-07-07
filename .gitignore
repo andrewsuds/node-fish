@@ -128,3 +128,4 @@ dist
 
 # Image files
 public/
+.DS_Store

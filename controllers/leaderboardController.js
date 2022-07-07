@@ -3,10 +3,10 @@ const pool = require("../helpers/db");
 function getTotalWeight(req, res) {
   const hours = req.params.hours;
   pool.query(
-    `SELECT username, CONCAT(sum(weight), ' total lbs') as value FROM post
+    `SELECT username, avatar, CONCAT(sum(weight), ' total lbs') as value FROM post
     INNER JOIN account on post.accountid = account.accountid
     WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
-    group by username
+    group by username, avatar
     order by value DESC;`,
     (err, result) => {
       if (err) {
@@ -22,10 +22,10 @@ function getTotalWeight(req, res) {
 function getTotalCaught(req, res) {
   const hours = req.params.hours;
   pool.query(
-    `SELECT username, CONCAT(count(postid), ' fish') as value FROM post
+    `SELECT username, avatar, CONCAT(count(postid), ' fish') as value FROM post
     INNER JOIN account on post.accountid = account.accountid
     WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
-    group by username
+    group by username, avatar
     order by value desc;`,
     (err, result) => {
       if (err) {
@@ -42,10 +42,10 @@ function getTotalCaught(req, res) {
 function getBiggest(req, res) {
   const hours = req.params.hours;
   pool.query(
-    `SELECT username, CONCAT(max(weight), ' lbs') as value FROM post
+    `SELECT username, avatar, CONCAT(max(weight), ' lbs') as value FROM post
       INNER JOIN account on post.accountid = account.accountid
       WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
-      group by username
+      group by username, avatar
       order by value DESC;`,
     (err, result) => {
       if (err) {
@@ -62,10 +62,10 @@ function getBiggest(req, res) {
 function getSmallest(req, res) {
   const hours = req.params.hours;
   pool.query(
-    `SELECT username, CONCAT(min(weight), ' lbs') as value FROM post
+    `SELECT username, avatar, CONCAT(min(weight), ' lbs') as value FROM post
       INNER JOIN account on post.accountid = account.accountid
       WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
-      group by username
+      group by username, avatar
       order by value ASC;`,
     (err, result) => {
       if (err) {
@@ -82,10 +82,10 @@ function getSmallest(req, res) {
 function getLongest(req, res) {
   const hours = req.params.hours;
   pool.query(
-    `SELECT username, CONCAT(max(length), '"') as value FROM post
+    `SELECT username, avatar, CONCAT(max(length), '"') as value FROM post
     INNER JOIN account on post.accountid = account.accountid
     WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
-    group by username
+    group by username, avatar
     order by value DESC;`,
     (err, result) => {
       if (err) {
