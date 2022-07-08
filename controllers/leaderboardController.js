@@ -7,7 +7,7 @@ function getTotalWeight(req, res) {
     INNER JOIN account on post.accountid = account.accountid
     WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
     group by username, avatar
-    order by value DESC;`,
+    order by sum(weight) DESC;`,
     (err, result) => {
       if (err) {
         return res.status(400).json("Error");
@@ -26,7 +26,7 @@ function getTotalCaught(req, res) {
     INNER JOIN account on post.accountid = account.accountid
     WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
     group by username, avatar
-    order by value desc;`,
+    order by count(postid) DESC;`,
     (err, result) => {
       if (err) {
         return res.status(400).json("Error");
@@ -46,7 +46,7 @@ function getBiggest(req, res) {
       INNER JOIN account on post.accountid = account.accountid
       WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
       group by username, avatar
-      order by value DESC;`,
+      order by max(weight) DESC;`,
     (err, result) => {
       if (err) {
         return res.status(400).json("Error");
@@ -66,7 +66,7 @@ function getSmallest(req, res) {
       INNER JOIN account on post.accountid = account.accountid
       WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
       group by username, avatar
-      order by value ASC;`,
+      order by min(weight) ASC;`,
     (err, result) => {
       if (err) {
         return res.status(400).json("Error");
@@ -86,7 +86,7 @@ function getLongest(req, res) {
     INNER JOIN account on post.accountid = account.accountid
     WHERE postdate >= NOW()-INTERVAL '${hours} HOURS'
     group by username, avatar
-    order by value DESC;`,
+    order by max(length) DESC;`,
     (err, result) => {
       if (err) {
         return res.status(400).json("Error");

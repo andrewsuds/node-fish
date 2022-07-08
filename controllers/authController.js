@@ -55,8 +55,6 @@ async function attemptLogin(req, res) {
 
   if (samePass) {
     req.session.accountid = potentialLogin.rows[0].accountid;
-    req.session.username = potentialLogin.rows[0].username;
-    req.session.avatar = potentialLogin.rows[0].avatar;
     return res.json({
       loggedIn: true,
       username: potentialLogin.rows[0].username,
@@ -70,14 +68,24 @@ async function attemptLogin(req, res) {
   }
 }
 
-function checkLogin(req, res) {
-  if (!req.session || !req.session.accountid) {
-    return res.json({ loggedIn: false });
-  } else {
+async function checkLogin(req, res) {
+  try {
+    if (!req.session || !req.session.accountid) {
+      return res.json({ loggedIn: false });
+    } else {
+      const userinfo = await pool.query(
+        "SELECT username, avatar FROM account WHERE accountid = $1",
+        [req.session.accountid]
+      );
+      return res.json({
+        loggedIn: true,
+        username: userinfo.rows[0].username,
+        avatar: userinfo.rows[0].avatar,
+      });
+    }
+  } catch (err) {
     return res.json({
-      loggedIn: true,
-      username: req.session.username,
-      avatar: req.session.avatar,
+      loggedIn: false,
     });
   }
 }

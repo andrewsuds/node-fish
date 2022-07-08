@@ -60,8 +60,25 @@ function uploadAvatar(req, res) {
     return res.json({ message: "Error in picture upload" });
   }
   const avatar = req.file.filename;
+  pool.query(
+    "UPDATE account SET avatar = $1 WHERE accountid = $2;",
+    [avatar, req.session.accountid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(400)
+          .json({ changed: false, message: "Error in updating account" });
+      }
 
-  return res.json({ message: "You uploaded: " + avatar });
+      if (result.rowCount >= 1) {
+        return res.json({
+          changed: true,
+          message: "Sucessfully changed profile picture!",
+        });
+      }
+    }
+  );
 }
 
 module.exports = { getProfilePosts, getActivity, uploadAvatar };
