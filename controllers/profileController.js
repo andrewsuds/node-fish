@@ -68,7 +68,7 @@ function uploadAvatar(req, res) {
         console.log(err);
         return res
           .status(400)
-          .json({ changed: false, message: "Error in updating account" });
+          .json({ changed: false, message: "Error updating account" });
       }
 
       if (result.rowCount >= 1) {
