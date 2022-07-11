@@ -44,7 +44,7 @@ async function attemptLogin(req, res) {
   if (potentialLogin.rowCount == 0) {
     return res.json({
       loggedIn: false,
-      message: "Incorrect username or password - This means no account found",
+      message: "Wrong username or password!",
     });
   }
 
@@ -63,7 +63,7 @@ async function attemptLogin(req, res) {
   } else {
     return res.json({
       loggedIn: false,
-      message: "Incorrect username or password",
+      message: "Wrong username or password!",
     });
   }
 }
