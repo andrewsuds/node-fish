@@ -19,12 +19,16 @@ async function createPost(req, res) {
     if (coordinate) {
       await Axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinate}&key=${process.env.MAPKEY}`
-      ).then((response) => {
-        if (response.data.plus_code.compound_code) {
-          const text = response.data.plus_code.compound_code;
-          location = text.substring(9, text.length - 5);
-        }
-      });
+      )
+        .then((response) => {
+          if (response.data.plus_code.compound_code) {
+            const text = response.data.plus_code.compound_code;
+            location = text.substring(9, text.length - 5);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
 
