@@ -40,7 +40,7 @@ function getActivity(req, res) {
     INNER JOIN account on comments.accountid = account.accountid
     WHERE post.accountid = $1 AND comments.accountid <> $1
     
-    ORDER BY activitydate DESC;`,
+    ORDER BY activitydate;`,
     [req.session.accountid],
     (err, result) => {
       if (err) {
