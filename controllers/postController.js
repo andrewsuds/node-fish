@@ -20,8 +20,10 @@ async function createPost(req, res) {
       await Axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinate}&key=${process.env.MAPKEY}`
       ).then((response) => {
-        const text = response.data.plus_code.compound_code;
-        location = text.substring(9, text.length - 5);
+        if (response.data.plus_code.compound_code) {
+          const text = response.data.plus_code.compound_code;
+          location = text.substring(9, text.length - 5);
+        }
       });
     }
   }
