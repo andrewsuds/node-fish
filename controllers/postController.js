@@ -28,6 +28,10 @@ async function createPost(req, res) {
         })
         .catch((err) => {
           console.log(err);
+          return res.json({
+            posted: false,
+            message: "Error in uploading picture",
+          });
         });
     }
   }
