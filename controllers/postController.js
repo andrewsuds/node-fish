@@ -1,7 +1,6 @@
 const pool = require("../helpers/db");
 const exif = require("../helpers/exif");
 const Axios = require("axios");
-const jo = require("jpeg-autorotate");
 
 async function createPost(req, res) {
   const weight = req.body.weight;
@@ -35,15 +34,6 @@ async function createPost(req, res) {
           });
         });
     }
-
-    await jo
-      .rotate(`./public/images/${picture}`)
-      .then(({ quality, orientation }) => {
-        console.log(`Image rotated. Quality was ${quality} ${orientation}`);
-      })
-      .catch((error) => {
-        console.log("Error rotating file: " + error.message);
-      });
   }
 
   if (req.body.length) {
