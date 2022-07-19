@@ -14,9 +14,9 @@ app.use(
   cors({
     origin: [
       "https://fish.aks22.com",
-      "https://fishbucket.netlify.app",
-      "http://localhost:3000",
+      "https://fishbucket.aks22.com",
       "https://react-fish-two.vercel.app",
+      "http://localhost:3000",
     ],
     credentials: true,
   })
