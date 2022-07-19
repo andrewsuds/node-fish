@@ -16,6 +16,7 @@ app.use(
       "https://fish.aks22.com",
       "https://fishbucket.netlify.app",
       "http://localhost:3000",
+      "https://react-fish-two.vercel.app",
     ],
     credentials: true,
   })
