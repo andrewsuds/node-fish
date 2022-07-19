@@ -81,4 +81,25 @@ function uploadAvatar(req, res) {
   );
 }
 
-module.exports = { getProfilePosts, getActivity, uploadAvatar };
+function getRandomPicture(req, res) {
+  pool.query(
+    "SELECT picture FROM post ORDER BY random() LIMIT 1;",
+    (err, result) => {
+      if (err) {
+        console.log(err.message);
+        return res.json({ picture: "/happening.png" });
+      }
+
+      if (result) {
+        return res.json(result.rows[0]);
+      }
+    }
+  );
+}
+
+module.exports = {
+  getProfilePosts,
+  getActivity,
+  uploadAvatar,
+  getRandomPicture,
+};
