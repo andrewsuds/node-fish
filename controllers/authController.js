@@ -90,4 +90,14 @@ async function checkLogin(req, res) {
   }
 }
 
-module.exports = { attemptRegister, attemptLogin, checkLogin };
+function logout(req, res) {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.json({ loggedOut: false });
+    } else {
+      return res.json({ loggedOut: true });
+    }
+  });
+}
+
+module.exports = { attemptRegister, attemptLogin, checkLogin, logout };
