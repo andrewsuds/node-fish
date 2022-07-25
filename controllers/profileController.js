@@ -1,17 +1,39 @@
 const pool = require("../helpers/db");
 
+function getProfileInfo(req, res) {
+  const username = req.params.username;
+  pool.query(
+    `SELECT name, avatar, (SELECT picture AS cover FROM post WHERE username = $1 ORDER BY random() LIMIT 1), CONCAT(count(post), ' fish caught') AS caught, CONCAT(sum(weight), ' lbs caught') AS weight
+    FROM account INNER JOIN post ON account.accountid = post.accountid
+    WHERE username = $1
+    GROUP BY name, avatar, weight, username;
+  `,
+    [username],
+    (err, result) => {
+      if (err) {
+        console.log(err.message);
+        return res.json({ message: err.message });
+      }
+
+      if (result) {
+        return res.json(result.rows[0]);
+      }
+    }
+  );
+}
+
 function getProfilePosts(req, res) {
   const username = req.params.username;
   pool.query(
-    `SELECT postid, username, species, weight, length, caption, picture, location, postdate,
-      (select count(likes) as likecount from likes where postid = post.postid),
-      (select count(comments) as commentcount from comments where post.postid = postid),
-      (select count(likes) as isliked from likes where postid = post.postid AND accountid = $1)
-      FROM post
-      INNER JOIN account on post.accountid = account.accountid
-      INNER JOIN species on post.speciesid = species.speciesid
-      WHERE username = $2
-      ORDER BY postid DESC;`,
+    `SELECT postid, username, avatar, species, weight, length, caption, picture, location, now()-postdate as postdate,
+    (select count(likes) as likecount from likes where postid = post.postid),
+    (select count(comments) as commentcount from comments where post.postid = postid),
+    (select count(likes) as isliked from likes where postid = post.postid AND accountid = $1)
+    FROM post
+    INNER JOIN account on post.accountid = account.accountid
+    INNER JOIN species on post.speciesid = species.speciesid
+    WHERE username = $2
+    ORDER BY postid DESC;`,
     [req.session.accountid, username],
     (err, result) => {
       if (err) {
@@ -98,6 +120,7 @@ function getRandomPicture(req, res) {
 }
 
 module.exports = {
+  getProfileInfo,
   getProfilePosts,
   getActivity,
   uploadAvatar,
