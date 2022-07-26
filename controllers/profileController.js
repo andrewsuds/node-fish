@@ -3,11 +3,15 @@ const pool = require("../helpers/db");
 function getProfileInfo(req, res) {
   const username = req.params.username;
   pool.query(
-    `SELECT name, avatar, (SELECT picture AS cover FROM post WHERE username = $1 ORDER BY random() LIMIT 1), CONCAT(count(post), ' fish caught') AS caught, CONCAT(sum(weight), ' lbs caught') AS weight
-    FROM account INNER JOIN post ON account.accountid = post.accountid
+    `SELECT 
+    name,
+    avatar,
+    (SELECT picture AS cover FROM post WHERE username = $1 AND picture IS NOT NULL ORDER BY random() LIMIT 1),
+    CONCAT(count(post), ' fish caught') as caught,
+    CONCAT(COALESCE(sum(weight),0), ' lbs caught') AS weight
+    FROM account LEFT JOIN post ON account.accountid = post.accountid
     WHERE username = $1
-    GROUP BY name, avatar, weight, username;
-  `,
+    group by name, avatar, username;`,
     [username],
     (err, result) => {
       if (err) {
