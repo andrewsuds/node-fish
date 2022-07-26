@@ -1,6 +1,7 @@
 const pool = require("../helpers/db");
 const exif = require("../helpers/exif");
 const Axios = require("axios");
+const fs = require("fs");
 
 async function createPost(req, res) {
   const weight = req.body.weight;
@@ -174,7 +175,7 @@ async function deletePost(req, res) {
   const postid = req.body.postid;
   try {
     const postAccount = await pool.query(
-      "SELECT accountid FROM post WHERE postid = $1;",
+      "SELECT accountid, picture FROM post WHERE postid = $1;",
       [postid]
     );
 
@@ -183,6 +184,9 @@ async function deletePost(req, res) {
         deleted: false,
         message: "Not authorized to delete this post!",
       });
+    }
+    if (postAccount.rows[0].picture) {
+      fs.unlinkSync(`./public/images/${postAccount.rows[0].picture}`);
     }
     await pool.query("DELETE FROM comments WHERE postid = $1;", [postid]);
     await pool.query("DELETE FROM likes WHERE postid = $1;", [postid]);
