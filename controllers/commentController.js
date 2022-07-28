@@ -32,7 +32,7 @@ function createComment(req, res) {
 function getPostComments(req, res) {
   const postid = req.params.postid;
   pool.query(
-    "SELECT commentid, username, avatar, comment, commentdate FROM comments INNER JOIN account on comments.accountid = account.accountid WHERE postid = $1 ORDER BY commentid DESC;",
+    "SELECT commentid, username, avatar, comment, now()-commentdate as commentdate FROM comments INNER JOIN account on comments.accountid = account.accountid WHERE postid = $1 ORDER BY commentid DESC;",
     [postid],
     (err, result) => {
       if (err) {

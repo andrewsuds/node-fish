@@ -185,12 +185,12 @@ async function deletePost(req, res) {
         message: "Not authorized to delete this post!",
       });
     }
-    if (postAccount.rows[0].picture) {
-      fs.unlinkSync(`./public/images/${postAccount.rows[0].picture}`);
-    }
     await pool.query("DELETE FROM comments WHERE postid = $1;", [postid]);
     await pool.query("DELETE FROM likes WHERE postid = $1;", [postid]);
     await pool.query("DELETE FROM post WHERE postid = $1;", [postid]);
+    if (postAccount.rows[0].picture) {
+      fs.unlinkSync(`./public/images/${postAccount.rows[0].picture}`);
+    }
     return res.json({ deleted: true });
   } catch (err) {
     console.log(err);
