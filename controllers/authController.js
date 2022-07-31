@@ -74,11 +74,12 @@ async function checkLogin(req, res) {
       return res.json({ loggedIn: false });
     } else {
       const userinfo = await pool.query(
-        "SELECT username, avatar FROM account WHERE accountid = $1",
+        "SELECT name, username, avatar FROM account WHERE accountid = $1",
         [req.session.accountid]
       );
       return res.json({
         loggedIn: true,
+        name: userinfo.rows[0].name,
         username: userinfo.rows[0].username,
         avatar: userinfo.rows[0].avatar,
       });
